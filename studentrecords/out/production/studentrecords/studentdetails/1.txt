@@ -1,0 +1,8 @@
+Name: asdfw
+id: 2131
+dob: 2003-09-04
+Marks:		|Maths	Science	Social	|
+			|65		87		97		|
+Total Score: 249
+Average: 83.0
+Status: Pass

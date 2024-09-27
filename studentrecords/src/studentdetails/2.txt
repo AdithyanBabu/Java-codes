@@ -1,0 +1,8 @@
+Name: sdgsdg
+id: 254
+dob: 2003-03-04
+Marks:		|Maths	Science	Social	|
+			|67		78		96		|
+Total Score: 241
+Average: 80.333336
+Status: Pass

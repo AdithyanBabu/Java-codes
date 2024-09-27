@@ -1,0 +1,8 @@
+Name: sdfa
+id: 321
+dob: 2002-03-12
+Marks:		|Maths	Science	Social	|
+			|76		87		99		|
+Total Score: 262
+Average: 87.333336
+Status: Pass

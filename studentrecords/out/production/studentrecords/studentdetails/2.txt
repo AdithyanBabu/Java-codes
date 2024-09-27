@@ -1,0 +1,8 @@
+Name: sdfg
+id: 234
+dob: 2003-04-05
+Marks:		|Maths	Science	Social	|
+			|76		89		56		|
+Total Score: 221
+Average: 73.666664
+Status: Pass
