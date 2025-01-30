@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Management</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header>
+<h1>Product List</h1>
+</header>
+
+<main>
+  <div class="main-header">
+    <input type="text" id="searchBar" placeholder="Search for products..." oninput="filterProducts()">
+    <a href="/products/add" class="link-btn">Add Product</a>
+  </div>
+
+  <div class="main-content">
+    <!-- Product cards -->
+    <div id="cardContainer">
+      <!-- Dynamically generated product cards -->
+      <div th:each="product : ${products}" class="product-card" th:data-name="${product.name}">
+        <h3 th:text="${product.name}">Product Name</h3>
+        <p th:text="'Price: $' + ${product.price}">Price</p>
+
+        <div class="card-links">
+          <a th:onclick="'openModal(' + ${product.id} + ')'" class="link-btn">Edit</a>
+          <a th:href="@{/products/delete/{id}(id=${product.id})}"
+             th:attr="data-product-name=${product.name}"
+             onclick="return confirm('Are you sure to delete this product: ' + this.getAttribute('data-product-name') + '?')"
+             class="link-btn">
+            Delete
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for editing a product -->
+    <div id="editProductModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h1>Edit Product</h1>
+        <form id="editProductForm" method="post">
+          <label for="edit-name">Name:</label>
+          <input type="text" id="edit-name" name="name" required>
+          <label for="edit-price">Price:</label>
+          <input type="number" id="edit-price" name="price" step="0.01" required>
+          <button class="link-btn" type="submit">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>2024 Product Management. All Rights Reserved.</p>
+</footer>
+
+<script>
+  // Filter products by name
+  function filterProducts() {
+      const query = document.getElementById('searchBar').value.toLowerCase();
+      const cards = document.querySelectorAll('.product-card');
+
+      cards.forEach(card => {
+          const name = card.getAttribute('data-name').toLowerCase();
+          card.style.display = name.includes(query) ? 'block' : 'none';
+      });
+  }
+
+  // Fetch product data and show the modal
+  function openModal(productId) {
+      fetch(`/products/${productId}`)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error("Failed to fetch product details.");
+              }
+              return response.json();
+          })
+          .then(product => {
+            // Populate form fields
+            document.getElementById('edit-name').value = product.name;
+            document.getElementById('edit-price').value = product.price;
+
+            // Set form action dynamically
+            const editForm = document.getElementById('editProductForm');
+            editForm.setAttribute('action', `/products/edit/${product.id}`);
+
+            // Display the modal
+            document.getElementById('editProductModal').style.display = 'flex';
+        })
+        .catch(error => console.error('Error fetching product:', error));
+  }
+
+  // Close modal
+  function closeModal() {
+      document.getElementById('editProductModal').style.display = 'none';
+  }
+
+  // Close modal when clicking outside of it
+  window.onclick = function(event) {
+      const modal = document.getElementById('editProductModal');
+      if (event.target === modal) {
+          closeModal();
+      }
+  };
+</script>
+
+</body>
+</html>
